@@ -16,3 +16,17 @@ var countdownTimer = function() {
 }
 
 countdownTimer();
+
+// question objects to use. Should change to json file afterwards
+questions = [
+  question1 = {
+    question: "What option is 3?",
+    options: ["1", "2", "3"],
+    index_correct: 3
+  },
+  question2 = {
+    question: "what option is 4?",
+    options: ["1", "2", "3", "4"],
+    index_correct: 4
+  }
+];
