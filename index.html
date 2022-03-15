@@ -11,22 +11,19 @@
   <header>
     <h1>View Highscores</h1>
     <div>
-      <p>Time: </p>
-      <p id="time-left">60</p>
+      <p>Time: <span id="time-left">60</span></p>
     </div>
   </header>
 
-  <main>
-    <h2>Coding Quiz Challenge</h2>
-    <p>
+  <main id="page-content">
+    <h2 class="welcome-title" id="quiz-title">Coding Quiz Challenge</h2>
+    <p id="quiz-instructions">
       Try to answer the following code-related questions within the time limit.
       Keep in mind that incorrect answers will penalize your score/time by ten
       seconds!
     </p>
-    <ul>
-      <li>
-        <button>Start Quiz</button>
-      </li>
+    <ul id="buttons-list">
+      <li class="btn"><button id="start-btn">Start Quiz</button></li>
     </ul>
   </main>
 
