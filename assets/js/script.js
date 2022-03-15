@@ -14,7 +14,6 @@ questions = [
 
 var pageContentEl = document.getElementById("page-content")
 var currentQuestion = 0;
-var quizScore = 0;
 
 var countdownTimer = function() {
   // getting time left
@@ -35,25 +34,29 @@ var countdownTimer = function() {
 
 var mainButtonHandler = function(event) {
   var targetEl = event.target;
+  // if the user clicks the start button, it should start the game
   if (targetEl.matches("#start-btn")) {
     startQuiz();
   }
-  else {
+  // if it is an option button, check if it is the last question
+  else if (currentQuestion < (questions.length - 1)) {
+    console.log("cq " + currentQuestion + "  ql " + questions.length);
     var chosenAnswer = parseInt(targetEl.id);
     var rightAnswer = questions[currentQuestion].indexCorrect;
     if (chosenAnswer === rightAnswer) {
-      quizScore += 1;
-      console.log("right");
-      // SHOW THAT ANSWER IS RIGHT
+      informUser("Right");
     }
     else {
       // DECREASE TIMER BY 10 SECONDS
-      // SHOW THAT ANSWER IS WRONG
-      console.log("wrong");
+      informUser("Wrong");
     }
     document.getElementById("buttons-list").textContent = "";
     currentQuestion++;
     showQuestion();
+  }
+  else {
+    // MAKE ENDQUIZ FUNCTION
+    console.log("No more questions")
   }
 };
 
@@ -95,6 +98,18 @@ var showQuestion = function() {
     // append <li> to <ul>
     btnsListEl.appendChild(listEl);
   }  
+};
+
+var informUser = function(informText) {
+  var mainEl = document.getElementById("page-content");
+  var answerCorrectnessEl = document.getElementById("answer-correctness");
+  // if the element doesn't exist, it will create one
+  if (!answerCorrectnessEl) {
+    var answerCorrectnessEl = document.createElement("p");
+    answerCorrectnessEl.id = "answer-correctness";
+    mainEl.appendChild(answerCorrectnessEl);
+  }
+  answerCorrectnessEl.textContent = informText;
 };
 
 // handles the buttons contained in main
