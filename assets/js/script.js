@@ -17,6 +17,47 @@ var buttonsListUlEl = document.getElementById("buttons-list");
 var currentQuestion = 0;
 var continueTimer = false;
 
+var makeMainPage = function(makeMainPage) {
+  var headerEl = document.getElementById("main-header");
+  var mainEl = document.getElementById("page-content");
+  // clearing content
+  headerEl.innerHTML = "";
+  mainEl.innerHTML = "";
+  // creating viewscores
+  var viewScoresEl = document.createElement("h1");
+  viewScoresEl.textContent = "View Highscores";
+  viewScoresEl.setAttribute("id", "view-scores");
+  headerEl.appendChild(viewScoresEl);
+  // creating timer
+  var timerEl = document.createElement("div");
+  timerEl.setAttribute("id", "timer-div");
+  timerEl.innerHTML = "<p>Time: <span id='time-left'>60</span></p>";
+  headerEl.appendChild(timerEl);
+  // editing h2
+  var quizTitleEl = document.createElement("h2");
+  quizTitleEl.setAttribute("id", "quiz-title");
+  quizTitleEl.className = "welcome-title";
+  quizTitleEl.textContent = "Coding Quiz Challenge";
+  mainEl.appendChild(quizTitleEl);
+  // paragraph
+  var quizInstEl = document.createElement("p");
+  quizInstEl.setAttribute("id", "quiz-instructions");
+  quizInstEl.textContent = `
+  Try to answer the following code-related questions within the time limit.
+  Keep in mind that incorrect answers will penalize your score/time by ten
+  seconds!
+  `;
+  mainEl.appendChild(quizInstEl);
+  // start button
+  var buttonsListUlEl = document.createElement("ul");
+  var startBtnEl = document.createElement("li");
+  buttonsListUlEl.setAttribute("id", "buttons-list");
+  startBtnEl.className = "btn";
+  startBtnEl.innerHTML = "<button id='start-btn'>Start Quiz</button>";
+  buttonsListUlEl.appendChild(startBtnEl);
+  mainEl.appendChild(buttonsListUlEl);
+}
+
 
 var decreaseTimer = function(seconds) {
   var timeLeftEl = document.getElementById("time-left");
@@ -50,11 +91,25 @@ var mainButtonHandler = function(event) {
   if (targetEl.nodeName == "BUTTON") {
     // if the user clicks the start button, it should start the game
     if (targetEl.matches("#start-btn")) {
+      // making sure it starts at the first question
+      currentQuestion = 0;
       startQuiz();
     }
     // if the user clicks submit, it should save the score
     else if (targetEl.matches("#submit-btn")) {
       submitScore();
+      showHighscores();
+    }
+    else if (targetEl.matches("#go-back-btn")) {
+      makeMainPage();
+    }
+    else if (targetEl.matches("#clear-scores-btn")) {
+      var confirmClear = window.confirm("Are you sure you want to delete the scores?");
+      if (confirmClear) {
+        var scoresListEl = document.getElementById("scores-list");
+        localStorage.removeItem("scores");
+        scoresListEl.textContent = "";
+      }
     }
     // if it is an option button, check if it is the last question
     else if (currentQuestion < (questions.length - 1)) {
@@ -155,9 +210,11 @@ var endQuiz = function() {
   var timeLeft = parseInt(timeLeftEl.textContent);
   var finalScoreEl = document.createElement("p");
   finalScoreEl.textContent = "Your score is " + timeLeft;
+  finalScoreEl.setAttribute("id", "final-score-text")
   pageContentEl.appendChild(finalScoreEl);
   // creating initials form
   var enterInitialsEl = document.createElement("form");
+  enterInitialsEl.setAttribute("id", "initials-form");
   enterInitialsEl.innerHTML = `
     <label for='initials'>Enter initials:</label>
     <input type='text' id='initials' name='initials' class='form-input'/>
@@ -188,18 +245,74 @@ var submitScore = function () {
   }
   // save score
   localStorage.setItem("scores", JSON.stringify(savedScores))
-  // SEND USER TO HIGH SCORES PAGE
+  // SORT ITEMS BEFORE SAVING
 }
 
 var getUserData = function () {
+  var inputInitialsEl = document.getElementById("initials");
+  userInitials = inputInitialsEl.value;
+  // TEST IF USER ENTERED INITIALS
   // the score is the time left
   var timeLeftEl = document.getElementById("time-left");
   var scoreValue = parseInt(timeLeftEl.textContent);
   scoreObj = {
+    initials: userInitials,
     value: scoreValue
-    // ADD NAME
   }
   return scoreObj;
+}
+
+var showHighscores = function () {
+  var mainEl = document.getElementById("page-content");
+  // changing title
+  var quizTitleEl = document.getElementById("quiz-title");
+  quizTitleEl.textContent = "High scores";
+  // deleting content
+  var viewScoresEl = document.getElementById("view-scores");
+  var timerEl = document.getElementById("timer-div");
+  var finalScoreEl = document.getElementById("final-score-text");
+  var initialsFormEl = document.getElementById("initials-form");
+  var submitBtnEl = document.getElementById("submit-btn");
+  var answerCorrectnessEl = document.getElementById("answer-correctness");
+  viewScoresEl.remove();
+  timerEl.remove();
+  finalScoreEl.remove();
+  initialsFormEl.remove();
+  answerCorrectnessEl.remove();
+  submitBtnEl.remove();
+  // show high scores
+  var scoresListEl = document.createElement("ol");
+  scoresListEl.setAttribute("id", "scores-list");
+  var savedScores = localStorage.getItem("scores");
+  if (savedScores) {
+    savedScores = JSON.parse(savedScores);
+    for (let i = 0; i < savedScores.length; i++) {
+      scoresListEl.appendChild(makeScoreItem(savedScores[i]));
+    }
+  }
+  else {
+    console.log("no scores")
+  }
+  mainEl.appendChild(scoresListEl);
+  // make go back button
+  var goBackBtnEl = document.createElement("button");
+  goBackBtnEl.className = "btn";
+  goBackBtnEl.setAttribute("id", "go-back-btn");
+  goBackBtnEl.textContent = "Go back";
+  mainEl.appendChild(goBackBtnEl);
+  // make clear scores button
+  var clearScoresBtn = document.createElement("button");
+  clearScoresBtn.className = "btn";
+  clearScoresBtn.setAttribute("id", "clear-scores-btn");
+  clearScoresBtn.textContent = "Clear high scores";
+  mainEl.appendChild(clearScoresBtn);
+}
+
+var makeScoreItem = function(scoreObj) {
+  var scoreListItemEl = document.createElement("li");
+  scoreListItemEl.textContent = scoreObj.initials + " - " + scoreObj.value;
+  scoreListItemEl.className = "score-list-item";
+  return scoreListItemEl;
 }
 
 // handles the buttons contained in main
