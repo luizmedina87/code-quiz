@@ -13,6 +13,7 @@ questions = [
 ];
 
 var pageContentEl = document.getElementById("page-content");
+var headerEl = document.getElementById("main-header");
 var buttonsListUlEl = document.getElementById("buttons-list");
 var currentQuestion = 0;
 var continueTimer = false;
@@ -88,6 +89,7 @@ var countdownTimer = function() {
 };
 
 var mainButtonHandler = function(event) {
+  event.preventDefault();
   var targetEl = event.target;
   // things only happen if the user clicks a button
   if (targetEl.nodeName == "BUTTON") {
@@ -99,8 +101,12 @@ var mainButtonHandler = function(event) {
     }
     // if the user clicks submit, it should save the score
     else if (targetEl.matches("#submit-btn")) {
-      submitScore();
-      showHighscores();
+      // get data from user
+      var highScore = getUserData();
+      if (validateInitials(highScore)) {
+        submitScore(highScore);
+        showHighscores();
+      }
     }
     else if (targetEl.matches("#go-back-btn")) {
       makeMainPage();
@@ -129,6 +135,16 @@ var mainButtonHandler = function(event) {
     }
   }
 };
+
+var initialsFormHandler = function(event) {
+  event.preventDefault();
+  // get data from user
+  var highScore = getUserData();
+  if (validateInitials(highScore)) {
+    submitScore(highScore);
+    showHighscores();
+  }
+}
 
 var startQuiz = function() {
   // title class should change to change css formatting
@@ -232,28 +248,24 @@ var endQuiz = function() {
   pageContentEl.appendChild(answerCorrectnessEl);
 }
 
-var submitScore = function () {
+var submitScore = function (highScore) {
   // try to get saved scores from local storage
   var savedScores = localStorage.getItem("scores");
   savedScores = JSON.parse(savedScores);
-  // get data from user
-  highScore = getUserData();
   // if there aren't any, create a list with scores, otherwise append
   if (!savedScores) {
     savedScores = [highScore];
   }
   else {
-    savedScores.push(highScore);
+    savedScores = insertSorted(savedScores, highScore);
   }
   // save score
   localStorage.setItem("scores", JSON.stringify(savedScores))
-  // SORT ITEMS BEFORE SAVING
 }
 
-var getUserData = function () {
+var getUserData = function() {
   var inputInitialsEl = document.getElementById("initials");
   userInitials = inputInitialsEl.value;
-  // TEST IF USER ENTERED INITIALS
   // the score is the time left
   var timeLeftEl = document.getElementById("time-left");
   var scoreValue = parseInt(timeLeftEl.textContent);
@@ -264,10 +276,30 @@ var getUserData = function () {
   return scoreObj;
 }
 
-var showHighscores = function () {
-  // changing title
-  // var quizTitleEl = document.getElementById("quiz-title");
-  // quizTitleEl.textContent = "High scores";
+var validateInitials = function(userObject) {
+  initials = userObject.initials;
+  if (!initials) {
+    window.alert("Please enter your initials");
+    return false;
+  }
+  else{
+    return true;
+  }
+}
+
+var insertSorted = function(array, object) {
+  var userScore = object.value;
+  for (var i = 0; i < array.length; i++) {
+    var auxScore = array[i].value;
+    if (userScore >= auxScore) {
+      break;
+    }
+  }
+  array.splice(i, 0, object);
+  return array;
+}
+
+var showHighscores = function() {
   // deleting content, recreating h2
   var mainEl = document.getElementById("page-content");
   var headerEl = document.getElementById("main-header");
@@ -278,7 +310,6 @@ var showHighscores = function () {
   quizTitleEl.className = "welcome-title";
   quizTitleEl.textContent = "High scores";
   mainEl.appendChild(quizTitleEl);
-
   // show high scores
   var scoresListEl = document.createElement("ol");
   scoresListEl.setAttribute("id", "scores-list");
@@ -309,17 +340,29 @@ var showHighscores = function () {
 
 var makeScoreItem = function(scoreObj) {
   var scoreListItemEl = document.createElement("li");
-  scoreListItemEl.textContent = scoreObj.initials + " - " + scoreObj.value;
+  scoreListItemEl.textContent = scoreObj.initials.toUpperCase() + " - " + scoreObj.value;
   scoreListItemEl.className = "score-list-item";
   return scoreListItemEl;
+}
+
+var viewScoresHandler = function(event) {
+  var targetEl = event.target;
+  if (targetEl.matches("#view-scores")) {
+    showHighscores();
+  }
 }
 
 // creates the main page elements
 makeMainPage()
 
+// creates the timer
+countdownTimer();
+
 // handles the buttons contained in main
 pageContentEl.addEventListener("click", mainButtonHandler);
 
-// starts the timer
-countdownTimer();
+// handles the input form at the end of the test
+pageContentEl.addEventListener("submit", initialsFormHandler);
 
+// handles the view highscores option
+headerEl.addEventListener("click", viewScoresHandler);
