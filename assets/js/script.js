@@ -12,9 +12,18 @@ questions = [
   }
 ];
 
-var pageContentEl = document.getElementById("page-content")
+var pageContentEl = document.getElementById("page-content");
+var buttonsListUlEl = document.getElementById("buttons-list");
 var currentQuestion = 0;
-var continueTimer = true;
+var continueTimer = false;
+
+
+var decreaseTimer = function(seconds) {
+  var timeLeftEl = document.getElementById("time-left");
+  var timeLeft = parseInt(timeLeftEl.textContent);
+  timeLeft -= seconds;
+  timeLeftEl.textContent = timeLeft;
+}
 
 var countdownTimer = function() {
   // getting time left
@@ -23,36 +32,44 @@ var countdownTimer = function() {
   const timer = setInterval(updateTime, 1000);
   function updateTime() {
     // continue going if there is time left and the test is not over
-    if ((timeLeft > 0) && continueTimer) {
-      // updating time left
-      timeLeft -= 1;
-      timeLeftEl.textContent = timeLeft;
-    }
-    else {
-      clearInterval(timer)
+    if (continueTimer) {
+      if ((timeLeft > 0) && continueTimer) {
+        // updating time left
+        decreaseTimer(1);
+      }
+      else {
+        clearInterval(timer)
+      }
     }
   }
 };
 
 var mainButtonHandler = function(event) {
   var targetEl = event.target;
-  // if the user clicks the start button, it should start the game
-  if (targetEl.matches("#start-btn")) {
-    startQuiz();
-  }
-  // if it is an option button, check if it is the last question
-  else if (currentQuestion < (questions.length - 1)) {
-    checkAnswer(targetEl);
-    // cleaning up the screen and going to next question
-    document.getElementById("buttons-list").textContent = "";
-    currentQuestion++;
-    // setting up next question
-    showQuestion();
-  }
-  // if there are no more questions, end quiz
-  else {
-    checkAnswer(targetEl);
-    endQuiz();
+  // things only happen if the user clicks a button
+  if (targetEl.nodeName == "BUTTON") {
+    // if the user clicks the start button, it should start the game
+    if (targetEl.matches("#start-btn")) {
+      startQuiz();
+    }
+    // if the user clicks submit, it should save the score
+    else if (targetEl.matches("#submit-btn")) {
+      submitScore();
+    }
+    // if it is an option button, check if it is the last question
+    else if (currentQuestion < (questions.length - 1)) {
+      checkAnswer(targetEl);
+      // cleaning up the screen and going to next question
+      document.getElementById("buttons-list").textContent = "";
+      currentQuestion++;
+      // setting up next question
+      showQuestion();
+    }
+    // if there are no more questions, end quiz
+    else {
+      checkAnswer(targetEl);
+      endQuiz();
+    }
   }
 };
 
@@ -66,6 +83,8 @@ var startQuiz = function() {
   // delete start quiz button
   var quizBtnEl = document.getElementById("start-btn");
   quizBtnEl.parentElement.remove();
+  // start timer
+  continueTimer = true;
   // should enter question mode
   showQuestion();
 }
@@ -103,7 +122,7 @@ var checkAnswer = function(buttonClickedEl) {
     informUser("Right");
   }
   else {
-    // DECREASE TIMER BY 10 SECONDS
+    decreaseTimer(10);
     informUser("Wrong");
   }
 }
@@ -122,7 +141,7 @@ var informUser = function(informText) {
 
 var endQuiz = function() {
   // stop timer
-
+  continueTimer = false;
   // geting page content
   var pageContentEl = document.getElementById("page-content");
   // clearing the buttons from the page
@@ -139,15 +158,48 @@ var endQuiz = function() {
   pageContentEl.appendChild(finalScoreEl);
   // creating initials form
   var enterInitialsEl = document.createElement("form");
-  enterInitialsEl.innerHTML = "<label for='initials'>Enter initials:</label><input type='text' id='initials' name='initials' class='form-input'/>";
+  enterInitialsEl.innerHTML = `
+    <label for='initials'>Enter initials:</label>
+    <input type='text' id='initials' name='initials' class='form-input'/>
+  `;
   pageContentEl.appendChild(enterInitialsEl);
   // creating submit button
   var submitButtonEl = document.createElement("button");
+  submitButtonEl.setAttribute("id", "submit-btn");
   submitButtonEl.textContent = "Submit";
   pageContentEl.appendChild(submitButtonEl);
   // placing correctness message as last element
   var answerCorrectnessEl = document.getElementById("answer-correctness");
   pageContentEl.appendChild(answerCorrectnessEl);
+}
+
+var submitScore = function () {
+  // try to get saved scores from local storage
+  var savedScores = localStorage.getItem("scores");
+  savedScores = JSON.parse(savedScores);
+  // get data from user
+  highScore = getUserData();
+  // if there aren't any, create a list with scores, otherwise append
+  if (!savedScores) {
+    savedScores = [highScore];
+  }
+  else {
+    savedScores.push(highScore);
+  }
+  // save score
+  localStorage.setItem("scores", JSON.stringify(savedScores))
+  // SEND USER TO HIGH SCORES PAGE
+}
+
+var getUserData = function () {
+  // the score is the time left
+  var timeLeftEl = document.getElementById("time-left");
+  var scoreValue = parseInt(timeLeftEl.textContent);
+  scoreObj = {
+    value: scoreValue
+    // ADD NAME
+  }
+  return scoreObj;
 }
 
 // handles the buttons contained in main
