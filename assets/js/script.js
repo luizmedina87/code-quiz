@@ -17,7 +17,7 @@ var buttonsListUlEl = document.getElementById("buttons-list");
 var currentQuestion = 0;
 var continueTimer = false;
 
-var makeMainPage = function(makeMainPage) {
+var makeMainPage = function() {
   var headerEl = document.getElementById("main-header");
   var mainEl = document.getElementById("page-content");
   // clearing content
@@ -62,27 +62,29 @@ var makeMainPage = function(makeMainPage) {
 var decreaseTimer = function(seconds) {
   var timeLeftEl = document.getElementById("time-left");
   var timeLeft = parseInt(timeLeftEl.textContent);
-  timeLeft -= seconds;
+  timeLeft = Math.max(0, timeLeft - seconds);
   timeLeftEl.textContent = timeLeft;
 }
 
 var countdownTimer = function() {
   // getting time left
-  var timeLeftEl = document.getElementById("time-left");
-  var timeLeft = parseInt(timeLeftEl.textContent);
-  const timer = setInterval(updateTime, 1000);
-  function updateTime() {
+  var updateTime = function () {
     // continue going if there is time left and the test is not over
     if (continueTimer) {
-      if ((timeLeft > 0) && continueTimer) {
+      var timeLeftEl = document.getElementById("time-left");
+      var timeLeft = parseInt(timeLeftEl.textContent);
+      if (timeLeft > 0) {
         // updating time left
         decreaseTimer(1);
       }
       else {
-        clearInterval(timer)
+        window.alert("Time is over!");
+        continueTimer = false;
+        showHighscores();
       }
     }
   }
+  setInterval(updateTime, 1000);
 };
 
 var mainButtonHandler = function(event) {
@@ -263,23 +265,20 @@ var getUserData = function () {
 }
 
 var showHighscores = function () {
-  var mainEl = document.getElementById("page-content");
   // changing title
-  var quizTitleEl = document.getElementById("quiz-title");
+  // var quizTitleEl = document.getElementById("quiz-title");
+  // quizTitleEl.textContent = "High scores";
+  // deleting content, recreating h2
+  var mainEl = document.getElementById("page-content");
+  var headerEl = document.getElementById("main-header");
+  var quizTitleEl = document.createElement("h2");
+  mainEl.innerHTML = "";
+  headerEl.innerHTML = "";
+  quizTitleEl.setAttribute("id", "quiz-title");
+  quizTitleEl.className = "welcome-title";
   quizTitleEl.textContent = "High scores";
-  // deleting content
-  var viewScoresEl = document.getElementById("view-scores");
-  var timerEl = document.getElementById("timer-div");
-  var finalScoreEl = document.getElementById("final-score-text");
-  var initialsFormEl = document.getElementById("initials-form");
-  var submitBtnEl = document.getElementById("submit-btn");
-  var answerCorrectnessEl = document.getElementById("answer-correctness");
-  viewScoresEl.remove();
-  timerEl.remove();
-  finalScoreEl.remove();
-  initialsFormEl.remove();
-  answerCorrectnessEl.remove();
-  submitBtnEl.remove();
+  mainEl.appendChild(quizTitleEl);
+
   // show high scores
   var scoresListEl = document.createElement("ol");
   scoresListEl.setAttribute("id", "scores-list");
@@ -315,8 +314,12 @@ var makeScoreItem = function(scoreObj) {
   return scoreListItemEl;
 }
 
+// creates the main page elements
+makeMainPage()
+
 // handles the buttons contained in main
 pageContentEl.addEventListener("click", mainButtonHandler);
 
+// starts the timer
 countdownTimer();
 
