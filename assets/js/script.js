@@ -9,6 +9,21 @@ questions = [
     question: "what option is 4?",
     options: ["1", "2", "3", "4"],
     indexCorrect: 3
+  },
+  question3 = {
+    question: "what option is 4?",
+    options: ["1", "2", "3", "4"],
+    indexCorrect: 3
+  },
+  question4 = {
+    question: "what option is 4?",
+    options: ["1", "2", "3", "4"],
+    indexCorrect: 3
+  },
+  question5 = {
+    question: "what option is 4?",
+    options: ["1", "2", "3", "4"],
+    indexCorrect: 3
   }
 ];
 
