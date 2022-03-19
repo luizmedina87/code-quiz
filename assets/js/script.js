@@ -1,29 +1,58 @@
 // question objects to use. Should change to json file afterwards
 questions = [
   question1 = {
-    question: "What option is 3?",
-    options: ["1", "2", "3"],
-    indexCorrect: 2
+    question: "What hoisting means?",
+    options: [
+      "Declarations are restricted to the imediate scope", 
+      "Declarations are moved to the top", 
+      "Declarations are interpreted linearly",
+      "Declarations are hosted on the html"
+    ],
+    indexCorrect: 1
   },
   question2 = {
-    question: "what option is 4?",
-    options: ["1", "2", "3", "4"],
+    question: "Which one is NOT a valid JS type?",
+    options: [
+      "Boolean", 
+      "Null", 
+      "Undefined", 
+      "Series", 
+      "Number", 
+      "Bigint"
+    ],
     indexCorrect: 3
   },
   question3 = {
-    question: "what option is 4?",
-    options: ["1", "2", "3", "4"],
+    question: "What is the difference between '==' and '==='?",
+    options: [
+      "The first compares values, whereas the last compares both values and types", 
+      "The first compares values and types, whereas the last compares only values", 
+      "'===' is not a valid operator", 
+      "'==' is not a valid operator"
+    ],
     indexCorrect: 3
   },
   question4 = {
-    question: "what option is 4?",
-    options: ["1", "2", "3", "4"],
-    indexCorrect: 3
+    question: "What does the following code return? \n var x = 3; \n var y = '3'; \n x + y",
+    options: [
+      "6",
+      "'33'", 
+      "Error",
+    ],
+    indexCorrect: 1
   },
   question5 = {
-    question: "what option is 4?",
-    options: ["1", "2", "3", "4"],
-    indexCorrect: 3
+    question: "How to declare a new variable 'i' to hold a number in JS?",
+    options: [
+      "variable i;", 
+      "i;", 
+      "Number i;",
+      "int i;" ,
+      "number i;",
+      "var i;"
+
+  ],
+    indexCorrect: 5
   }
 ];
 
