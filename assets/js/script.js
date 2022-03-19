@@ -65,6 +65,8 @@ var continueTimer = false;
 var makeMainPage = function() {
   var headerEl = document.getElementById("main-header");
   var mainEl = document.getElementById("page-content");
+  // Setting class for main
+  mainEl.className = "main-structure main-landing";
   // clearing content
   headerEl.innerHTML = "";
   mainEl.innerHTML = "";
@@ -76,7 +78,7 @@ var makeMainPage = function() {
   // creating timer
   var timerEl = document.createElement("div");
   timerEl.setAttribute("id", "timer-div");
-  timerEl.innerHTML = "<p>Time: <span id='time-left'>60</span></p>";
+  timerEl.innerHTML = "<p>Time: <span id='time-left'>6000</span></p>";
   headerEl.appendChild(timerEl);
   // editing h2
   var quizTitleEl = document.createElement("h2");
@@ -97,8 +99,8 @@ var makeMainPage = function() {
   var buttonsListUlEl = document.createElement("ul");
   var startBtnEl = document.createElement("li");
   buttonsListUlEl.setAttribute("id", "buttons-list");
-  startBtnEl.className = "btn";
-  startBtnEl.innerHTML = "<button id='start-btn'>Start Quiz</button>";
+  startBtnEl.className = "start-btn-li";
+  startBtnEl.innerHTML = "<button id='start-btn' class='btn'>Start Quiz</button>";
   buttonsListUlEl.appendChild(startBtnEl);
   mainEl.appendChild(buttonsListUlEl);
 }
@@ -155,6 +157,7 @@ var mainButtonHandler = function(event) {
     else if (targetEl.matches("#go-back-btn")) {
       makeMainPage();
     }
+    // clear the scores set out by the user
     else if (targetEl.matches("#clear-scores-btn")) {
       var confirmClear = window.confirm("Are you sure you want to delete the scores?");
       if (confirmClear) {
@@ -191,7 +194,9 @@ var initialsFormHandler = function(event) {
 }
 
 var startQuiz = function() {
-  // title class should change to change css formatting
+  // classes should change to change css formatting
+  var mainEl = document.getElementById("page-content");
+  mainEl.className = "main-structure main-questions";
   var quizTitleEl = document.getElementById("quiz-title");
   quizTitleEl.className = "question-title";
   // <p> should disappear because questions don't need it
@@ -220,11 +225,12 @@ var showQuestion = function() {
     var btnsListEl = document.getElementById("buttons-list");
     // create <li>
     var listEl = document.createElement("li");
-    listEl.className = "btn";
+    listEl.className = "question-btn-li";
     // create <button>
     var btnEl = document.createElement("button");
+    btnEl.className = "question-btn btn";
     btnEl.setAttribute("id", i);
-    btnEl.textContent = optionTxt;
+    btnEl.textContent = i + ". " + optionTxt;
     // append <button> to <li>
     listEl.appendChild(btnEl);
     // append <li> to <ul>
@@ -247,12 +253,14 @@ var checkAnswer = function(buttonClickedEl) {
 var informUser = function(informText) {
   var mainEl = document.getElementById("page-content");
   var answerCorrectnessEl = document.getElementById("answer-correctness");
-  // if the element doesn't exist, it will create one
-  if (!answerCorrectnessEl) {
-    var answerCorrectnessEl = document.createElement("p");
-    answerCorrectnessEl.id = "answer-correctness";
-    mainEl.appendChild(answerCorrectnessEl);
+  // if element exists, it will remove it
+  if (answerCorrectnessEl) {
+    answerCorrectnessEl.remove();
   }
+  // and now recreate it, to recreate animation
+  var answerCorrectnessEl = document.createElement("p");
+  answerCorrectnessEl.id = "answer-correctness";
+  mainEl.appendChild(answerCorrectnessEl);
   answerCorrectnessEl.textContent = informText;
 };
 
@@ -274,6 +282,8 @@ var endQuiz = function() {
   finalScoreEl.textContent = "Your score is " + timeLeft;
   finalScoreEl.setAttribute("id", "final-score-text")
   pageContentEl.appendChild(finalScoreEl);
+  // creating div to hold form and button
+  // var divEl = document.create FINISH HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // creating initials form
   var enterInitialsEl = document.createElement("form");
   enterInitialsEl.setAttribute("id", "initials-form");
@@ -370,13 +380,13 @@ var showHighscores = function() {
   mainEl.appendChild(scoresListEl);
   // make go back button
   var goBackBtnEl = document.createElement("button");
-  goBackBtnEl.className = "btn";
+  goBackBtnEl.className = "hs-btn btn";
   goBackBtnEl.setAttribute("id", "go-back-btn");
   goBackBtnEl.textContent = "Go back";
   mainEl.appendChild(goBackBtnEl);
   // make clear scores button
   var clearScoresBtn = document.createElement("button");
-  clearScoresBtn.className = "btn";
+  clearScoresBtn.className = "hs-btn btn";
   clearScoresBtn.setAttribute("id", "clear-scores-btn");
   clearScoresBtn.textContent = "Clear high scores";
   mainEl.appendChild(clearScoresBtn);

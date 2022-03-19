@@ -1,0 +1,137 @@
+:root {
+    --contrast-color: #bc65e4;
+    --btn-color: #352073;
+    --txt-color: black;
+    --bkgd-color: white;
+    --primary-font: Helvetica, Arial, sans-serif;
+}
+
+/* a:link, a:visited, a:hover, a:active {
+    text-decoration: none;
+    color: inherit;
+} */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bkgd-color);
+    color: var(--txt-color);
+    font-family: var(--txt-color);
+}
+
+/* Header section */
+header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 30px 0;
+    font-size: medium;
+    width: 90%;
+}
+
+h1 {
+    font-size: medium;
+    font-weight: normal;
+    color: var(--contrast-color);
+}
+
+/* Main section */
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-structure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+}
+
+.main-questions {
+    margin: 5vh;
+    align-items: flex-start;
+    width: auto;
+}
+
+.welcome-title {
+    text-align: center;
+    margin: 15px;
+}
+.question-title {
+    margin: 5px 0;
+}
+
+#quiz-instructions {
+    text-align: center;
+    width: 80%;
+}
+
+.question-title {
+    text-align: left;
+}
+
+#answer-correctness {
+    border-top: 2px solid gray;
+    color: gray;
+    width: 100%;
+    animation-name: correctness;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes correctness {
+    from {opacity: 100;}
+    to {opacity: 0;}
+}
+
+
+/* Buttons */
+
+.btn {
+    background-color: var(--btn-color);
+    border: none;
+    color: var(--bkgd-color);
+    padding: 5px 20px;
+    text-decoration: none;
+    font-size: medium;
+    border-radius: 6px;
+}
+
+#start-btn {
+    margin: 15px;
+    text-align: center;
+}
+
+.hs-btn {
+    text-align: center;
+    text-decoration: none;
+    font-size: medium;
+    border-radius: 6px;
+    margin: 5px;
+}
+
+#buttons-list {
+    list-style-type: none;
+}
+
+.question-btn {
+    width: 100%;
+    text-align: left;
+    margin: 5px;
+    padding: 5px 10px;
+}
+
+.btn:hover {
+    background-color: var(--contrast-color);
+}
+
+
