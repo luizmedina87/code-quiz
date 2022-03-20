@@ -16,14 +16,14 @@ Created and developed by Luiz Medina.
 
 ## Screenshots
 /Users/luizmedina/projects/code-quiz/assets/images
-![alt text](https://github.com/luizmedina87/code-quiz/assets/images/ss1.png)
+![alt text](https://github.com/luizmedina87/code-quiz/blob/main/assets/images/ss1.png)
 
-![alt text](https://github.com/luizmedina87/code-quiz/assets/images/ss2.png)
+![alt text](https://github.com/luizmedina87/code-quiz/blob/main/assets/images/ss2.png)
 
-![alt text](https://github.com/luizmedina87/code-quiz/assets/images/ss3.png)
+![alt text](https://github.com/luizmedina87/code-quiz/blob/main/assets/images/ss3.png)
 
-![alt text](https://github.com/luizmedina87/code-quiz/assets/images/ss4.png)
+![alt text](https://github.com/luizmedina87/code-quiz/blob/main/assets/images/ss4.png)
 
-![alt text](https://github.com/luizmedina87/code-quiz/assets/images/ss5.png)
+![alt text](https://github.com/luizmedina87/code-quiz/blob/main/assets/images/ss5.png)
 
-![alt text](https://github.com/luizmedina87/code-quiz/assets/images/ss6.png)
+![alt text](https://github.com/luizmedina87/code-quiz/blob/main/assets/images/ss6.png)
