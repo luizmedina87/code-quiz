@@ -63,6 +63,7 @@ var currentQuestion = 0;
 var continueTimer = false;
 var totalTime = 60;
 
+
 var makeMainPage = function() {
   var headerEl = document.getElementById("main-header");
   var mainEl = document.getElementById("page-content");
@@ -114,6 +115,7 @@ var decreaseTimer = function(seconds) {
   timeLeftEl.textContent = timeLeft;
 }
 
+
 var countdownTimer = function() {
   // getting time left
   var updateTime = function () {
@@ -135,6 +137,7 @@ var countdownTimer = function() {
   setInterval(updateTime, 1000);
 };
 
+
 var mainButtonHandler = function(event) {
   event.preventDefault();
   var targetEl = event.target;
@@ -142,7 +145,6 @@ var mainButtonHandler = function(event) {
   if (targetEl.nodeName == "BUTTON") {
     // if the user clicks the start button, it should start the game
     if (targetEl.matches("#start-btn")) {
-      // debugger;
       // making sure it starts at the first question
       currentQuestion = 0;
       startQuiz();
@@ -185,6 +187,7 @@ var mainButtonHandler = function(event) {
   }
 };
 
+
 var initialsFormHandler = function(event) {
   event.preventDefault();
   // get data from user
@@ -194,6 +197,7 @@ var initialsFormHandler = function(event) {
     showHighscores();
   }
 }
+
 
 var startQuiz = function() {
   // classes should change to change css formatting
@@ -214,6 +218,7 @@ var startQuiz = function() {
   // should enter question mode
   showQuestion();
 }
+
 
 var showQuestion = function() {
   // unpack content
@@ -242,6 +247,7 @@ var showQuestion = function() {
   }  
 };
 
+
 var checkAnswer = function(buttonClickedEl) {
   var chosenAnswer = parseInt(buttonClickedEl.id);
   var rightAnswer = questions[currentQuestion].indexCorrect;
@@ -253,6 +259,7 @@ var checkAnswer = function(buttonClickedEl) {
     informUser("Wrong");
   }
 }
+
 
 var informUser = function(informText) {
   var mainEl = document.getElementById("page-content");
@@ -267,6 +274,7 @@ var informUser = function(informText) {
   mainEl.appendChild(answerCorrectnessEl);
   answerCorrectnessEl.textContent = informText;
 };
+
 
 var endQuiz = function() {
   // stop timer
@@ -288,7 +296,6 @@ var endQuiz = function() {
   finalScoreEl.textContent = "Your score is " + timeLeft + ".";
   finalScoreEl.setAttribute("id", "final-score-text")
   pageContentEl.appendChild(finalScoreEl);
-  // debugger;
   // creating div to hold form and button
   var divEl = document.createElement("div");
   divEl.className = "submit-section";
@@ -312,6 +319,7 @@ var endQuiz = function() {
   pageContentEl.appendChild(answerCorrectnessEl);
 }
 
+
 var submitScore = function (highScore) {
   // try to get saved scores from local storage
   var savedScores = localStorage.getItem("scores");
@@ -327,6 +335,7 @@ var submitScore = function (highScore) {
   localStorage.setItem("scores", JSON.stringify(savedScores))
 }
 
+
 var getUserData = function() {
   var inputInitialsEl = document.getElementById("initials");
   userInitials = inputInitialsEl.value;
@@ -340,6 +349,7 @@ var getUserData = function() {
   return scoreObj;
 }
 
+
 var validateInitials = function(userObject) {
   initials = userObject.initials;
   if (!initials) {
@@ -350,6 +360,7 @@ var validateInitials = function(userObject) {
     return true;
   }
 }
+
 
 var insertSorted = function(array, object) {
   var userScore = object.value;
@@ -362,6 +373,7 @@ var insertSorted = function(array, object) {
   array.splice(i, 0, object);
   return array;
 }
+
 
 var showHighscores = function() {
   // stop timer
@@ -410,6 +422,7 @@ var showHighscores = function() {
   divEl.appendChild(clearScoresBtn);
 }
 
+
 var makeScoreItem = function(scoreObj, rank) {
   var scoreListItemEl = document.createElement("li");
   scoreListItemEl.textContent = rank + ". " + scoreObj.initials.toUpperCase() + " - " + scoreObj.value;
@@ -417,12 +430,14 @@ var makeScoreItem = function(scoreObj, rank) {
   return scoreListItemEl;
 }
 
+
 var viewScoresHandler = function(event) {
   var targetEl = event.target;
   if (targetEl.matches("#view-scores")) {
     showHighscores();
   }
 }
+
 
 // creates the main page elements
 makeMainPage()
