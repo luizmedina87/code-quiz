@@ -15,7 +15,7 @@ https://luizmedina87.github.io/code-quiz/
 Created and developed by Luiz Medina.
 
 ## Screenshots
-/Users/luizmedina/projects/code-quiz/assets/images
+
 ![alt text](https://github.com/luizmedina87/code-quiz/blob/main/assets/images/ss1.png)
 
 ![alt text](https://github.com/luizmedina87/code-quiz/blob/main/assets/images/ss2.png)
