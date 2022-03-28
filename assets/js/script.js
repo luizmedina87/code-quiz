@@ -130,7 +130,7 @@ var countdownTimer = function() {
       else {
         window.alert("Time is over!");
         continueTimer = false;
-        showHighscores();
+        endQuiz();
       }
     }
   }
